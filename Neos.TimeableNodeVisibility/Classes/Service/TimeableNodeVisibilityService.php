@@ -99,7 +99,14 @@ class TimeableNodeVisibilityService
             $sitesNodeTypeName = NodeTypeName::fromString('Neos.Neos:Sites');
             $rootNode = $subgraph->findRootNodeByType($sitesNodeTypeName);
             if ($rootNode === null) {
-                throw new \RuntimeException(sprintf('No sites root node found in content repository "%s"', $contentRepository->id->value), 1719047148);
+                $this->logger->info(
+                    sprintf(
+                        'No sites root node found in content repository "%s" for dimension space point %s, skipping.',
+                        $contentRepository->id->value,
+                        $dimensionSpacePoint->toJson()
+                    )
+                );
+                continue;
             }
 
             $nodes = $subgraph->findDescendantNodes(
